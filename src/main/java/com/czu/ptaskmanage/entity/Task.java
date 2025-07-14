@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -54,4 +55,6 @@ public class Task {
     @Schema(description = "重复任务结束时间，格式：yyyy-MM-dd'T'HH:mm:ss，可能为空")
     private LocalDateTime repeatEnd;
 
+    @Schema(description = "关联的标签列表")
+    private List<Tag> tags; // 非数据库字段
 }

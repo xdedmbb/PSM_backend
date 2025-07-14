@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,4 +25,7 @@ public class Tag {
 
     @Schema(description = "创建时间", example = "2025-07-14 18:00:00")
     private Date createTime;
+
+    @Schema(description = "关联的任务列表")
+    private List<Task> tasks; // 非数据库字段，方便返回用
 }
