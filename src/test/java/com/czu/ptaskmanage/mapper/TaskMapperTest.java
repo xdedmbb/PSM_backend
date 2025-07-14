@@ -34,14 +34,14 @@ public class TaskMapperTest {
 
         int result = taskMapper.insertTask(task);
         assertEquals(1, result);
-        assertNotNull(task.getId());
+        assertNotNull(task.getTaskId());
     }
 
     @Test
     public void testSelectTaskById() {
         Task task = taskMapper.selectTaskById(1); // 请确保数据库中存在ID为1的任务
         assertNotNull(task);
-        assertEquals(1, task.getId());
+        assertEquals(1, task.getTaskId());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TaskMapperTest {
         task.setCreateTime(LocalDateTime.now());
         taskMapper.insertTask(task);
 
-        Integer id = task.getId();
+        Integer id = task.getTaskId();
         int result = taskMapper.deleteTaskById(id);
         assertEquals(1, result);
 

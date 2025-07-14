@@ -12,11 +12,11 @@ public interface TaskMapper {
             "                         priority, create_time, repeat_type, repeat_value, repeat_end)\n" +
             "        VALUES(#{userId}, #{title}, #{description}, #{startTime}, #{endTime}, #{remindTime},\n" +
             "               #{status}, #{priority}, #{createTime}, #{repeatType}, #{repeatValue}, #{repeatEnd})")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "taskId")
     int insertTask(Task task);
 
     // 根据 ID 删除任务
-    @Delete("DELETE FROM task WHERE id = #{id}")
+    @Delete("DELETE FROM task WHERE task_id = #{id}")
     int deleteTaskById(Integer id);
 
     // 更新任务
@@ -31,7 +31,7 @@ public interface TaskMapper {
             "            repeat_type = #{repeatType},\n" +
             "            repeat_value = #{repeatValue},\n" +
             "            repeat_end = #{repeatEnd}\n" +
-            "        WHERE id = #{id}")
+            "        WHERE task_id = #{taskId}")
     int updateTask(Task task);
 
     // 根据用户ID查询该用户的全部任务
@@ -39,6 +39,6 @@ public interface TaskMapper {
     List<Task> selectTasksByUserId(Integer userId);
 
     // 根据任务ID查询单个任务
-    @Select("SELECT * FROM task WHERE id = #{id}")
+    @Select("SELECT * FROM task WHERE task_id = #{id}")
     Task selectTaskById(Integer id);
 }

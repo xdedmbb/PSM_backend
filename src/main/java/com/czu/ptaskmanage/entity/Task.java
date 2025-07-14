@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Task {
 
     @Schema(description = "任务ID", example = "1")
-    private Integer id;
+    private Integer taskId;
 
     @Schema(description = "所属用户ID", example = "1001")
     private Integer userId;
