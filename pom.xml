@@ -18,6 +18,14 @@
         <java.version>8</java.version>
     </properties>
     <dependencies>
+        <!-- 添加 springdoc-openapi 支持 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.14</version>
+        </dependency>
+
+        <!-- 添加 springdoc-openapi 支持 -->
         <!--  JWT验证  -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

@@ -1,23 +1,18 @@
 package com.czu.ptaskmanage.controller;
 
 import com.czu.ptaskmanage.service.UserService;
-import com.czu.ptaskmanage.service.impl.UserServiceImpl;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.czu.ptaskmanage.entity.User;
 import com.czu.ptaskmanage.vo.ResultVO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +20,9 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
+@Tag(name = "用户管理接口", description = "微信登录及用户相关接口")
 public class UserController {
-    @Autowired
+    @Resource
     private UserService userService;
 
     @Value("${wechat.appid}")
@@ -41,7 +37,15 @@ public class UserController {
     @Value("${jwt.expire}")
     private int jwtExpire;
 
-    //url http://localhost:9663/api/user/wxLogin
+    /**
+     * 微信小程序登录接口
+     * 通过前端传入的 code 调用微信接口获取 openid 和 session_key，
+     * 若用户不存在则新增用户，返回 JWT token 和用户信息。
+     *
+     * @param body 请求体，必须包含 code 字段
+     * @return ResultVO，成功时包含 token 和用户信息
+     */
+    @Operation(summary = "微信登录", description = "微信小程序登录，获取用户token")
     @PostMapping("/wxLogin")
     public ResultVO wxLogin(@RequestBody Map<String, String> body) {
         log.info("==========UserController==============wxLogin=========");
@@ -62,10 +66,9 @@ public class UserController {
             return new ResultVO(500, "微信请求异常", null);
         }
 
-        ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> response;
         try {
-            response = mapper.readValue(resultStr, new TypeReference<Map<String, Object>>() {});
+            response = new com.fasterxml.jackson.databind.ObjectMapper().readValue(resultStr, Map.class);
         } catch (Exception e) {
             log.error("微信响应解析失败：" + resultStr, e);
             return new ResultVO(500, "微信响应解析异常", null);
@@ -76,7 +79,6 @@ public class UserController {
         }
 
         String openid = (String) response.get("openid");
-        String sessionKey = (String) response.get("session_key");
 
         User user = userService.getUserByOpenid(openid);
         if (user == null) {
@@ -104,22 +106,33 @@ public class UserController {
         return new ResultVO(200, "登录成功", data);
     }
 
-    // http://localhost:9663/api/user/testselect
-    @RequestMapping("/testselect")
+    /**
+     * 测试根据 openid 查询用户
+     *
+     * @return 查询到的用户信息
+     */
+    @Operation(summary = "测试查询用户", description = "根据openid='test'查询用户")
+    @GetMapping("/testselect")
     public ResultVO testselect() {
         log.info("====test001====");
         User test = userService.getUserByOpenid("test");
         System.out.println(test);
-        return  new ResultVO<User>(200,"",test);
+        return new ResultVO<User>(200, "", test);
     }
-    // http://localhost:9663/api/user/testinsert
-    @RequestMapping("/testinsert")
+
+    /**
+     * 测试插入用户
+     *
+     * @return 插入影响的行数
+     */
+    @Operation(summary = "测试插入用户", description = "插入一个openid为'testinsert'的测试用户")
+    @PostMapping("/testinsert")
     public ResultVO testinsert() {
         log.info("====testinsert====");
         Integer count = userService.addUser(new User()
                 .setOpenid("testinsert")
                 .setCreateTime(new Date()));
 
-        return  new ResultVO<Integer>(200,"",count);
+        return new ResultVO<Integer>(200, "", count);
     }
 }

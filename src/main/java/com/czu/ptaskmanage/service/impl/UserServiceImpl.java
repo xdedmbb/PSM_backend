@@ -7,11 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Resource
     UserMapper userMapper ;
 
     public User getUserByOpenid(String openid) {
