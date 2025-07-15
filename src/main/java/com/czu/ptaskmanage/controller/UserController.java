@@ -91,9 +91,7 @@ public class UserController {
         }
 
         String openid = (String) response.get("openid");
-
         // 查询或新增用户
-
         User user = userService.getUserByOpenid(openid);
         if (user == null) {
             user = new User().setOpenid(openid).setNickname(nickname).setAvatarUrl(avatarUrl).setCreateTime(new Date());
@@ -106,7 +104,9 @@ public class UserController {
 
         // 生成JWT，放openid
         String token = jwtUtil.generateToken(openid);
-
+        log.info("-------------存入的token------------");
+        log.info(token);
+        log.info("-------------存入的token------------");
         Map<String, Object> data = new HashMap<>();
         data.put("token", token);
         data.put("user", user);
@@ -121,7 +121,13 @@ public class UserController {
         if (token == null || token.isEmpty()) {
             return new ResultVO<>(401, "缺少token", null);
         }
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7); // ✅ 去掉前缀
+        }
 
+        log.info("-------------得到的token------------");
+        log.info(token);
+        log.info("-------------得到的token------------");
         String openid;
         try {
             openid = jwtUtil.parseToken(token);
