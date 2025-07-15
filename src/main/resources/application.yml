@@ -1,5 +1,8 @@
+# application.yml
 server:
   port: 9663
+  address: 0.0.0.0   # 👈 必须是 0.0.0.0 才能让局域网设备访问
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver

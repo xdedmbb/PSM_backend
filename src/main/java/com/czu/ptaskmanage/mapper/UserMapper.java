@@ -37,4 +37,7 @@ public interface UserMapper {
             "            user_status = #{userStatus}, update_time = NOW()\n" +
             "        WHERE user_id = #{userId}")
     int updateUser(User user);
+
+    @Update("UPDATE user SET nickname = #{nickname}, avatar_url = #{avatarUrl} WHERE user_id = #{userId}")
+    int updateUserProfile(User user);
 }

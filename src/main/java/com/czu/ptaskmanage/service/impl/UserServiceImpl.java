@@ -27,4 +27,12 @@ public class UserServiceImpl implements UserService {
         userMapper.updateLoginTime(userId, new Date());
     }
 
+    public void updateUserProfile(Integer userId, String nickname, String avatarUrl) {
+        User user = new User()
+                .setUserId(userId)
+                .setNickname(nickname)
+                .setAvatarUrl(avatarUrl);
+        userMapper.updateUserProfile(user); // 你需要写一个 update 方法
+    }
+
 }

@@ -4,6 +4,10 @@ import com.czu.ptaskmanage.entity.User;
 
 public interface UserService {
     User getUserByOpenid(String openid);
-    public int addUser(User user);
-    public void updateLoginTime(Integer userId);
+    int addUser(User user);
+    void updateLoginTime(Integer userId);
+
+    // 可选：如果需要更新用户昵称和头像
+    void updateUserProfile(Integer userId, String nickname, String avatarUrl);
 }
+
